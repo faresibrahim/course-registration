@@ -1,0 +1,8 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+
+# backend/ and frontend/ have their own .gitignore files
