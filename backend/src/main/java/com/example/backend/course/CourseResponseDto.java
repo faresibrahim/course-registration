@@ -1,3 +1,3 @@
 package com.example.backend.course;
 
-public record CourseResponseDto(Long Id, String Code, String title, int capacity) {}
+public record CourseResponseDto(Long id, String code, String title, int capacity, long seatsLeft) {}

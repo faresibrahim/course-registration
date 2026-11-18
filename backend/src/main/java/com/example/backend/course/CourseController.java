@@ -11,15 +11,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.backend.enrollment.EnrollmentService;
+
 
 @RestController
 @RequestMapping("/courses")
 public class CourseController {
   
   private final CourseService courseService;
+  private final EnrollmentService enrollmentService;
 
-  public CourseController(CourseService courseService) {
+  public CourseController(CourseService courseService, EnrollmentService enrollmentService) {
     this.courseService = courseService;
+    this.enrollmentService=enrollmentService;
   }
 
   @PostMapping
@@ -44,9 +48,9 @@ public class CourseController {
 
 
   private CourseResponseDto toResponse(Course course) {
-
-    return new CourseResponseDto(course.getId(), course.getCode(), course.getTitle(), course.getCapacity());
- 
+    long id = course.getId();
+    long seatsLeft = enrollmentService.getSeatsLeft(id);
+    return new CourseResponseDto(course.getId(), course.getCode(), course.getTitle(), course.getCapacity(), seatsLeft);
   }
 
 }

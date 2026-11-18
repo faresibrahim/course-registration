@@ -55,7 +55,7 @@ public class EnrollmentService {
     return enrollments;
   }
 
-  public long getSeatsLeft(Long courseId) {
+  public Long getSeatsLeft(Long courseId) {
     Course course = courseService.getCourseById(courseId);
     long seatsLeft = course.getCapacity() - enrollmentRepository.countByCourseId(courseId);
     return seatsLeft;
