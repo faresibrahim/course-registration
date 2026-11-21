@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.backend.common.ConflictException;
+import com.example.backend.common.NotFoundException;
 import com.example.backend.course.Course;
 import com.example.backend.course.CourseService;
 import com.example.backend.user.User;
@@ -28,10 +30,10 @@ public class EnrollmentService {
     Course course = courseService.getCourseById(courseId);
 
     if(enrollmentRepository.existsByUserIdAndCourseId(user.getId(), courseId)) {
-      throw new IllegalArgumentException("Already registered in this course");
+      throw new ConflictException("Already registered in this course");
     }
     if(enrollmentRepository.countByCourseId(courseId) >= course.getCapacity()) {
-      throw new IllegalArgumentException("Course is full");
+      throw new ConflictException("Course is full");
     }
 
     Enrollment enrollment = new Enrollment(user, course);
@@ -42,8 +44,8 @@ public class EnrollmentService {
   public void drop(String email, Long courseId) {
     User user = userService.findUser(email);
 
-    if(!enrollmentRepository.existsByUserIdAndCourseId(user.getId(), courseId)) {
-      throw new IllegalArgumentException("Not registered in this course");
+    if (!enrollmentRepository.existsByUserIdAndCourseId(user.getId(), courseId)) {
+      throw new NotFoundException("Not registered in this course");
     }
 
     enrollmentRepository.deleteByUserIdAndCourseId(user.getId(), courseId);

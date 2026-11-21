@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.backend.common.ConflictException;
+import com.example.backend.common.NotFoundException;
+
 @Service
 public class CourseService {
   private final CourseRepository courseRepository;
@@ -14,7 +17,7 @@ public class CourseService {
 
   public Course createCourse(String code, String title, int capacity) {
     if(courseRepository.existsByCode(code)) {
-      throw new IllegalArgumentException("Course code is already registered");
+      throw new ConflictException("Course code is already registered");
     }
     if(capacity < 1) {
       throw new IllegalArgumentException("Capacity must be at least 1");
@@ -25,7 +28,7 @@ public class CourseService {
   }
 
   public Course getCourseById(Long id) {
-    Course course = courseRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Course not found"));
+    Course course = courseRepository.findById(id).orElseThrow(() -> new NotFoundException("Course not found"));
 
     return course;
   }

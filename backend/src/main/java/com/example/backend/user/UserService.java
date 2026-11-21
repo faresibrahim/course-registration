@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.backend.common.ConflictException;
+import com.example.backend.common.NotFoundException;
+
 @Service 
 public class UserService {
   private final UserRepository userRepository;
@@ -14,7 +17,7 @@ public class UserService {
 
   public User createUser(String email, String passwordHash, String name, Role role) {
     if(userRepository.existsByEmail(email)) {
-      throw new IllegalArgumentException("Email is Already registered");
+      throw new ConflictException("Email is Already registered");
     }
 
     
@@ -25,14 +28,14 @@ public class UserService {
 
   public User findUser(String email) {
     
-    User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
+    User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found"));
     
     return user;
   }
 
   public void removeUser(String email) {
     User user = userRepository.findByEmail(email)
-        .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        .orElseThrow(() -> new NotFoundException("User not found"));
       
     userRepository.delete(user);
 
